@@ -1,0 +1,237 @@
+{
+    "id": 126185,
+    "name": "test_code",
+    "code": "test_code",
+    "description": "",
+    "order": null,
+    "fpAutoExport": true,
+    "mobLargeColNb": 4,
+    "mobSmallColNb": 3,
+    "pivot_id": null,
+    "p_catid": null,
+    "locked": 0,
+    "default_row_id": null,
+    "tplUrl": null,
+    "cssUrl": null,
+    "cssStamp": 0,
+    "sysFunc": null,
+    "triggerUpdateUrl": null,
+    "customCss": null,
+    "lastModified": "2019-03-07 17:40:33",
+    "sstamp": "1551976833",
+    "groups": [],
+    "prefs": {
+        "link_presentation": 2
+    },
+    "views": [
+        {
+            "id": 264448,
+            "default_row_id": null,
+            "name": "Default view",
+            "description": null,
+            "presentation": 1,
+            "locked": false,
+            "filterGroup": null,
+            "restrictions": [],
+            "linkViewIds": [],
+            "applyHiddenFieldsInRowEdit": true,
+            "grid": {
+                "rowDisplay": null
+            },
+            "card": {
+                "hz_field_id": 1367490,
+                "layout": 1,
+                "title_field_id": null,
+                "co_field_id": null,
+                "free_order": 0
+            },
+            "calendar": {
+                "display_field_id": 1367490,
+                "start_field_id": null,
+                "end_field_id": null,
+                "co_field_id": null
+            },
+            "gantt": {
+                "text_field_id": null,
+                "dateConfig": {
+                    "type": 1,
+                    "start_date_field_id": null,
+                    "duration_field_id": null
+                },
+                "projectConfig": {
+                    "type": 0
+                },
+                "parentConfig": {
+                    "type": 0
+                },
+                "userConfig": {
+                    "field_id": null
+                },
+                "scale": 1
+            },
+            "scheduler": {
+                "display_field_id": null,
+                "group_by_field_id": null,
+                "start_field_id": null,
+                "end_field_id": null,
+                "color_field_id": null,
+                "startDate": "3",
+                "scale": "1"
+            },
+            "map": {
+                "location_field_id": null,
+                "display_field_id": null,
+                "color_field_id": null
+            }
+        }
+    ],
+    "selectedViewId": 264448,
+    "totalRowCount": 2,
+    "forbidAddRow": false,
+    "forbidDeleteRow": false,
+    "fields": [
+        {
+            "id": 1367490,
+            "group_id": null,
+            "name": "Description",
+            "code": null,
+            "fixed_code": "description",
+            "description": null,
+            "type": "mediumtext",
+            "ctype": "",
+            "order": 1,
+            "defaultDay": false,
+            "defaultValueConfig": 0,
+            "notifActiv": "0",
+            "timeAndDate": false,
+            "textFormat": 0,
+            "codeScan": false,
+            "lastIncrement": null,
+            "pixelWidth": 118,
+            "mobTitle": false,
+            "mobLargeColNb": 1,
+            "mobSmallColNb": 1,
+            "numformat": null,
+            "numlang": null,
+            "default_field_restriction": "0",
+            "section": "",
+            "activePresentation": 1,
+            "linkPresentation": 2,
+            "addLinkViewId": null,
+            "sysFunc": null,
+            "tplUrl": null,
+            "lastModified": "2019-03-07 16:49:54",
+            "hasRestrictions": false,
+            "values": [
+                {
+                    "id": 19975055,
+                    "value": "First item"
+                }
+            ],
+            "readOnly": 0
+        },
+        {
+            "id": 1367491,
+            "group_id": null,
+            "name": "Comments",
+            "code": null,
+            "fixed_code": "comments",
+            "description": null,
+            "type": "comments",
+            "ctype": "",
+            "order": 8,
+            "defaultDay": false,
+            "defaultValueConfig": 0,
+            "notifActiv": "0",
+            "timeAndDate": false,
+            "textFormat": 0,
+            "codeScan": false,
+            "lastIncrement": null,
+            "pixelWidth": 291,
+            "mobTitle": false,
+            "mobLargeColNb": 1,
+            "mobSmallColNb": 1,
+            "numformat": null,
+            "numlang": null,
+            "default_field_restriction": "0",
+            "section": "",
+            "activePresentation": 1,
+            "linkPresentation": 2,
+            "addLinkViewId": null,
+            "sysFunc": null,
+            "tplUrl": null,
+            "lastModified": "2019-03-07 16:49:54",
+            "hasRestrictions": false,
+            "notifSubscribe": null,
+            "values": [
+                {
+                    "id": 19975055,
+                    "value": null
+                }
+            ],
+            "unread": 0,
+            "readOnly": 0
+        },
+        {
+            "id": 1367492,
+            "group_id": null,
+            "name": "Updates",
+            "code": null,
+            "fixed_code": "updates",
+            "description": null,
+            "type": "activity",
+            "ctype": "",
+            "order": 9,
+            "defaultDay": false,
+            "defaultValueConfig": 0,
+            "notifActiv": "0",
+            "timeAndDate": false,
+            "textFormat": 0,
+            "codeScan": false,
+            "lastIncrement": null,
+            "pixelWidth": 200,
+            "mobTitle": false,
+            "mobLargeColNb": 1,
+            "mobSmallColNb": 1,
+            "numformat": null,
+            "numlang": null,
+            "default_field_restriction": "0",
+            "section": null,
+            "activePresentation": 1,
+            "linkPresentation": 2,
+            "addLinkViewId": null,
+            "sysFunc": null,
+            "tplUrl": null,
+            "lastModified": "2019-03-07 16:49:54",
+            "hasRestrictions": false,
+            "notifSubscribe": {
+                "notif": {
+                    "type": 0
+                },
+                "message": {
+                    "type": 0,
+                    "activityFieldSelection": []
+                },
+                "mail": {
+                    "type": 0
+                }
+            },
+            "values": [
+                {
+                    "id": 19975055,
+                    "value": null
+                }
+            ],
+            "unread": 0,
+            "readOnly": 0
+        }
+    ],
+    "rowInfos": {
+        "19975055": {
+            "order": 1,
+            "index": 0
+        }
+    },
+    "rowInfosLength": 1,
+    "hiddenFields": []
+}

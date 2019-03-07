@@ -1,0 +1,21 @@
+{
+    "tableId": 126185,
+    "filter": {
+        "applyViewFilters": {
+            "filterGroup": {
+                "operator": "and",
+                "filters": [
+                    {
+                        "id": "tmpId",
+                        "json": {
+                            "predicate": "is",
+                            "operand": "First item"
+                        },
+                        "field_id": 1367490,
+                        "filter_type": "text"
+                    }
+                ]
+            }
+        }
+    }
+}

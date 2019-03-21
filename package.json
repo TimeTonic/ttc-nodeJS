@@ -4,12 +4,15 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "test": "mocha"
+        "test": "mocha",
+        "test-w": "mocha -w --check-leaks --sort"
     },
     "author": "Jean Plouin",
     "license": "PRIVATE",
     "dependencies": {
+        "mime-types": "^2.1.22",
         "request": "^2.88.0",
-        "request-promise": "^4.2.4"
+        "request-promise": "^4.2.4",
+        "uuid": "^3.3.2"
     }
 }

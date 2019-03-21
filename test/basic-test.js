@@ -1,4 +1,4 @@
-/* global describe beforeEach afterEach it */
+/* global describe beforeEach afterEach it xit */
 'use strict';
 
 const assert = require('assert');
@@ -35,6 +35,10 @@ describe('TTCApi', () => {
 			return book.fetchTables()
 				.then(() => readJson('./resources/fetchTables.json'))
 				.then(expected => {
+					book.tables.forEach(table => {
+						delete table.lastModified;
+						delete table.sstamp;
+					});
 					assert.deepEqual(book.tables, expected);
 				})
 				.catch(assert.fail);
@@ -101,5 +105,43 @@ describe('TTCApi', () => {
 				})
 				.catch(assert.fail);
 		});
+		it('should getFieldWithFixedCode', () => {
+			let expected;
+			return readJson('./resources/getFieldWithFixedCode.json')
+				.then(field => {
+					expected = field;
+					return book.fetchTables();
+				})
+				.then(() => book.getFieldWithFixedCode('test_code', 'description'))
+				.then(field => {
+					assert.deepEqual(field, expected);
+				})
+				.catch(assert.fail);
+		});
+		it('should uploadFile', () => {
+			let uuid = '45745c60-7b1a-11e8-9c9c-2d42b21b1a3e',
+				path = require('path'),
+				file = path.join(__dirname, 'resources', 'jean.jpg'),
+				expected;
+			return book.fetchTables()
+				.then(() => readJson('./resources/uploadFile.json'))
+				.then(uploadResult => {
+					expected = uploadResult;
+					return book.uploadFile('values', 'attachments', 19974813, file, uuid);
+				})
+				.then(uploadResult => {
+					delete uploadResult.sstamp;
+					delete uploadResult.id;
+					delete uploadResult.internName;
+					delete uploadResult.lastModified;
+					delete uploadResult.createdVNB;
+					delete uploadResult.mdc;
+					delete uploadResult.media_id;
+					assert.deepEqual(uploadResult, expected);
+				})
+				.catch(assert.fail);
+		});
+
+		xit('should cleanFiles', () => {});
 	});
 });

@@ -17,8 +17,8 @@
     "sysFunc": null,
     "triggerUpdateUrl": null,
     "customCss": null,
-    "lastModified": "2019-03-07 17:40:33",
-    "sstamp": "1551976833",
+    "lastModified": "2019-03-21 15:06:45",
+    "sstamp": "1553177205",
     "groups": [],
     "prefs": {
         "link_presentation": 2
@@ -33,7 +33,6 @@
             "locked": false,
             "filterGroup": null,
             "restrictions": [],
-            "linkViewIds": [],
             "applyHiddenFieldsInRowEdit": true,
             "grid": {
                 "rowDisplay": null
@@ -82,19 +81,20 @@
                 "location_field_id": null,
                 "display_field_id": null,
                 "color_field_id": null
-            }
+            },
+            "linkViewIds": []
         }
     ],
     "selectedViewId": 264448,
     "totalRowCount": 2,
-    "forbidAddRow": false,
+    "forbidAddRow": 0,
     "forbidDeleteRow": false,
     "fields": [
         {
             "id": 1367490,
             "group_id": null,
             "name": "Description",
-            "code": null,
+            "code": "",
             "fixed_code": "description",
             "description": null,
             "type": "mediumtext",
@@ -118,9 +118,10 @@
             "activePresentation": 1,
             "linkPresentation": 2,
             "addLinkViewId": null,
+            "autodocFieldId": null,
             "sysFunc": null,
             "tplUrl": null,
-            "lastModified": "2019-03-07 16:49:54",
+            "lastModified": "2019-03-21 15:06:08",
             "hasRestrictions": false,
             "values": [
                 {
@@ -135,6 +136,51 @@
             "readOnly": 0
         },
         {
+            "id": 1391762,
+            "group_id": null,
+            "name": "Attachments",
+            "code": null,
+            "fixed_code": "attachments",
+            "description": null,
+            "type": "files",
+            "ctype": "",
+            "order": 2,
+            "defaultDay": false,
+            "defaultValueConfig": 0,
+            "notifActiv": "0",
+            "timeAndDate": false,
+            "textFormat": 0,
+            "codeScan": false,
+            "lastIncrement": null,
+            "pixelWidth": 200,
+            "mobTitle": false,
+            "mobLargeColNb": 1,
+            "mobSmallColNb": 1,
+            "numformat": null,
+            "numlang": null,
+            "default_field_restriction": "0",
+            "section": null,
+            "activePresentation": 1,
+            "linkPresentation": 2,
+            "addLinkViewId": null,
+            "autodocFieldId": null,
+            "sysFunc": null,
+            "tplUrl": null,
+            "lastModified": "2019-03-21 15:06:45",
+            "hasRestrictions": false,
+            "values": [
+                {
+                    "id": 19975055,
+                    "value": null
+                },
+                {
+                    "id": 19975262,
+                    "value": null
+                }
+            ],
+            "readOnly": 0
+        },
+        {
             "id": 1367491,
             "group_id": null,
             "name": "Comments",
@@ -143,7 +189,7 @@
             "description": null,
             "type": "comments",
             "ctype": "",
-            "order": 8,
+            "order": 9,
             "defaultDay": false,
             "defaultValueConfig": 0,
             "notifActiv": "0",
@@ -162,9 +208,10 @@
             "activePresentation": 1,
             "linkPresentation": 2,
             "addLinkViewId": null,
+            "autodocFieldId": null,
             "sysFunc": null,
             "tplUrl": null,
-            "lastModified": "2019-03-07 16:49:54",
+            "lastModified": "2019-03-21 15:06:45",
             "hasRestrictions": false,
             "notifSubscribe": null,
             "values": [
@@ -189,7 +236,7 @@
             "description": null,
             "type": "activity",
             "ctype": "",
-            "order": 9,
+            "order": 10,
             "defaultDay": false,
             "defaultValueConfig": 0,
             "notifActiv": "0",
@@ -208,9 +255,10 @@
             "activePresentation": 1,
             "linkPresentation": 2,
             "addLinkViewId": null,
+            "autodocFieldId": null,
             "sysFunc": null,
             "tplUrl": null,
-            "lastModified": "2019-03-07 16:49:54",
+            "lastModified": "2019-03-21 15:06:45",
             "hasRestrictions": false,
             "notifSubscribe": {
                 "notif": {

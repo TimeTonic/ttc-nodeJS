@@ -2,6 +2,9 @@
 const log = require('debug')('TTCBook.js');
 
 const request = require('request-promise');
+const fs = require('fs');
+const path = require('path');
+const mime = require('mime-types');
 
 const TTC_API_REQUEST_GET_TABLES = 'getBookTables';
 const TTC_API_REQUEST_GET_VALUES = 'getTableValues';
@@ -309,6 +312,64 @@ class Book {
 				}
 			})
 			.catch(reject);	
+	}
+
+	getFieldWithFixedCode(tableCode, fieldFixedCode) {
+		return new Promise((resolve, reject) => {
+			this.getTableWithCode(tableCode)
+				.then(table => {
+					for (let i = 0; i < table.fields.length; i++) {
+						const field = table.fields[i];
+						if (field.fixed_code === fieldFixedCode) {
+							return resolve(field);
+						}
+					}
+					return reject(new Error(`no field found with code ${fieldFixedCode} for table with code ${tableCode}`));
+				})
+				.catch(reject);
+		});
+	}
+
+	uploadFile(tableCode, fieldFixedCode, rowId, filepath, uuid) {
+		return new Promise((resolve, reject) => {
+			if (uuid === undefined) {
+				uuid = require('uuid/v1')();
+			}
+			this.getFieldWithFixedCode(tableCode, fieldFixedCode)
+				.then(field => {
+					let fieldId = field.id;
+					const options = {
+						method: 'POST',
+						uri: this.endpoint,
+						formData: {
+							req: 'fileUpload',
+							version: this.version,
+							o_u: this.u_c,
+							u_c: this.u_c,
+							sesskey: this.sesskey,
+							uuid: uuid,
+							qqfile: {
+								value: fs.createReadStream(filepath),
+								options: {
+									filename: path.basename(filepath),
+									contentType: mime.lookup(filepath)
+								}
+							},
+							rowId: rowId,
+							fieldId: fieldId
+						},
+						json: true
+					};
+					return request(options);
+				})
+				.then(response => {
+					if (response.status !== 'ok') {
+						return reject(new Error(JSON.stringify(response)));
+					}
+					resolve(response);
+				})
+				.catch(reject);
+		});
 	}
 }
 

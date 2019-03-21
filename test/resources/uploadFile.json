@@ -1,0 +1,19 @@
+{
+    "status": "ok",
+    "b_c": "mochatests",
+    "b_o": "ttcapitester",
+    "field_id": "1367386",
+    "row_id": "19974813",
+    "success": true,
+    "uuid": "45745c60-7b1a-11e8-9c9c-2d42b21b1a3e",
+    "type": "media",
+    "ext": "jpg",
+    "originName": "jean.jpg",
+    "name": "jean.jpg",
+    "utilisateur_code": "ttcapitester",
+    "filesize": "43221",
+    "url": "https://timetonic.com/live/dbi/in/full/45745c60-7b1a-11e8-9c9c-2d42b21b1a3e/jean.jpg",
+    "gallery": "https://timetonic.com/live/dbi/in/norm/45745c60-7b1a-11e8-9c9c-2d42b21b1a3e/jean.jpg",
+    "preview": "https://timetonic.com/live/dbi/in/_tb/45745c60-7b1a-11e8-9c9c-2d42b21b1a3e/jean.jpg",
+    "req": "fileUpload"
+}

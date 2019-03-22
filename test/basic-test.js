@@ -118,7 +118,7 @@ describe('TTCApi', () => {
 				})
 				.catch(assert.fail);
 		});
-		it('should uploadFile', () => {
+		xit('should uploadFile', () => {
 			let uuid = '45745c60-7b1a-11e8-9c9c-2d42b21b1a3e',
 				path = require('path'),
 				file = path.join(__dirname, 'resources', 'jean.jpg'),
@@ -142,6 +142,10 @@ describe('TTCApi', () => {
 				.catch(assert.fail);
 		});
 
-		xit('should cleanFiles', () => {});
+		xit('should cleanFiles', () => {
+
+		});
+
+		xit('should return tables as a map {} not an array', () => {});
 	});
 });

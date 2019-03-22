@@ -67,8 +67,8 @@ class Book {
 
 	fetchTableValues(tableId, filter) {
 		return new Promise((resolve, reject) => {
-			if (this.tableValues && this.tableValues[tableId]) {
-				return resolve(this.tableValues[tableId]);
+			if (!filter && this.tables && this.tables[tableId]) {
+				return resolve();
 			}
 			const options = this.getRequestOptions();
 			options.form.req = TTC_API_REQUEST_GET_VALUES;
@@ -79,11 +79,17 @@ class Book {
 			request(options)
 				.then(parsedBody => {
 					if (parsedBody.status === 'ok') {
-						if (!this.tableValues) {
-							this.tableValues = {};
+						if (!this.tables) {
+							this.tables = [parsedBody.tableValues];
 						}
-						this.tableValues[tableId] = parsedBody.tableValues;
-						return resolve(this.tableValues[tableId]);
+						for (let i = 0; i < this.tables.length; i++) {
+							const table = this.tables[i];
+							if (table.id === tableId) {
+								table.fields = parsedBody.tableValues.fields;
+								return resolve();
+							}
+						}
+						return reject(new Error('table with id ' + tableId + ' not found'));
 					}
 					return reject(new Error(parsedBody.errorMsg));
 				})

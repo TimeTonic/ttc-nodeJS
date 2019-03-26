@@ -347,12 +347,29 @@ class Book {
 		});
 	}
 
+	stats(filepath) {
+		return new Promise((resolve, reject) => {
+			fs.stat(filepath, (err, stats) => {
+				if (err) {
+					return reject(err);
+				}
+				if (stats.size === 0) {
+					return reject(new Error('attempt to upload an empty file'));
+				}
+
+				resolve(stats);
+			});
+		});
+	}
+
 	uploadFile(tableCode, fieldFixedCode, rowId, filepath, uuid) {
 		return new Promise((resolve, reject) => {
 			if (uuid === undefined) {
 				uuid = require('uuid/v1')();
 			}
-			this.getFieldWithFixedCode(tableCode, fieldFixedCode)
+			
+			this.stats(filepath)
+				.then(() => this.getFieldWithFixedCode(tableCode, fieldFixedCode))
 				.then(field => {
 					let fieldId = field.id;
 					const options = {

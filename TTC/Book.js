@@ -174,38 +174,82 @@ class Book {
 		});
 	}
 
-	getFilterConfig(table, config) {
+	getFilterConfig(table, configs, operator) {
 		return new Promise((resolve, reject) => {
-			let fieldId;
-			for (let i = 0; i < table.fields.length; i++) {
-				const field = table.fields[i];
-				if (field.fixed_code === config.key) {
-					fieldId = field.id;
-					break;
+			if (!operator) {
+				operator = 'and';
+			}
+			let filters = [];
+			if (!Array.isArray(configs)) {
+				configs = [configs];
+			}
+			for (let i = 0; i < configs.length; i++) {
+				const config = configs[i];
+				if (!config.operand) {
+					config.operand = 'is';
 				}
+				let fieldId;
+				for (let j = 0; j < table.fields.length; j++) {
+					const field = table.fields[j];
+					if (field.fixed_code === config.key) {
+						fieldId = field.id;
+						break;
+					}
+				}
+				if (!fieldId) {
+					return reject(new Error('could not find a filter config for field ' + config.key));
+				}
+				filters.push({
+					'id': `tmp${i}`,
+					'json': {
+						'predicate': config.operand,
+						'operand': config.value
+					},
+					'field_id': fieldId,
+					'filter_type': config.filterType ? config.filterType : 'text'
+				});
 			}
-			if (!fieldId) {
-				return reject(new Error('could not find a filter config for field ' + config.key));
-			}
+			
 			resolve({
 				tableId: table.id,
 				filter: {
 					'applyViewFilters': {
 						'filterGroup': {
-							'operator': 'and',
-							'filters': [{
-								'id': 'tmpId',
-								'json': {
-									'predicate': 'is',
-									'operand': config.value
-								},
-								'field_id': fieldId,
-								'filter_type': 'text'
-							}]
+							'operator': operator,
+							'filters': filters
 						}
 					}
 				}
 			});
+		});
+	}
+
+	createOrUpdateTTCRowWithId(rowId, fieldValues) {
+		return new Promise((resolve, reject) => {
+			const options = this.getRequestOptions();
+			if (fieldValues.rowId) {
+				delete fieldValues.rowId;
+			}
+			options.form.req = TTC_API_REQUEST_CREATE_OR_UPDATE_ROW;
+			options.form.rowId = rowId;
+			options.form.fieldValues = fieldValues;
+			options.form.bypassUrlTrigger = false;
+
+			return request(options)
+				.then(parsedBody => {
+					if (parsedBody.status === 'ok') {
+						if (Array.isArray(parsedBody.rows) && parsedBody.rows.length === 1) {
+							resolve(parsedBody.rows[0].id);
+						}
+						else {
+							reject(new Error('unabled to identify new row id'));
+						}
+					}
+					else {
+						reject(new Error(JSON.stringify(parsedBody)));
+					}
+				})
+				.catch(reject);
 		});
 	}
 
@@ -246,26 +290,9 @@ class Book {
 							return reject(new Error(`ScaleUp found ${tableValues.fields[0].values.length} records for internal id ${filteredElementId}`));
 						}
 					}
-					const options = this.getRequestOptions();
-					options.form.req = TTC_API_REQUEST_CREATE_OR_UPDATE_ROW;
-					options.form.rowId = rowId;
-					options.form.fieldValues = fieldValues;
-					options.form.bypassUrlTrigger = false;
-					return request(options);
+					return this.createOrUpdateTTCRowWithId(rowId, fieldValues);
 				})
-				.then(parsedBody => {
-					if (parsedBody.status === 'ok') {
-						if (Array.isArray(parsedBody.rows) && parsedBody.rows.length === 1) {
-							resolve(parsedBody.rows[0].id);
-						}
-						else {
-							reject(new Error('unabled to identify new row id'));
-						}
-					}
-					else {
-						reject(new Error(JSON.stringify(parsedBody)));
-					}
-				})
+				.then(resolve)
 				.catch(reject);
 		});
 	}
@@ -351,10 +378,16 @@ class Book {
 		});
 	}
 
-	uploadFile(tableCode, fieldFixedCode, rowId, filepath, uuid) {
+	uploadFile(tableCode, fieldFixedCode, rowId, filepath, uuid, filename, mimetype) {
 		return new Promise((resolve, reject) => {
-			if (uuid === undefined) {
+			if (!uuid) {
 				uuid = require('uuid/v1')();
+			}
+			if (!filename) {
+				filename = path.basename(filepath);
+			}
+			if (!mimetype) {
+				mimetype = mime.lookup(filepath);
 			}
 			
 			this.stats(filepath)
@@ -374,8 +407,8 @@ class Book {
 							qqfile: {
 								value: fs.createReadStream(filepath),
 								options: {
-									filename: path.basename(filepath),
-									contentType: mime.lookup(filepath)
+									filename: filename,
+									contentType: mimetype
 								}
 							},
 							rowId: rowId,

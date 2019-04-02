@@ -66,8 +66,10 @@ class Book {
 	}
 
 	fetchTableValues(tableId, filter) {
+		console.log('tableId : ' + tableId);
 		return new Promise((resolve, reject) => {
 			if (!filter && this.tables && this.tables[tableId]) {
+				console.log('no filter');
 				return resolve();
 			}
 			const options = this.getRequestOptions();
@@ -78,6 +80,7 @@ class Book {
 			}
 			request(options)
 				.then(parsedBody => {
+					console.log('parsedBody.status : '+parsedBody.status);
 					if (parsedBody.status === 'ok') {
 						if (!this.tables) {
 							this.tables = [parsedBody.tableValues];
@@ -93,7 +96,13 @@ class Book {
 					}
 					return reject(new Error(parsedBody.errorMsg));
 				})
-				.catch(reject);
+				.catch(err => {
+					console.log(err.message 
+						? err.message 
+						: err.stack 
+							? err.stack 
+							: err);
+				});
 		});
 	}
 
@@ -105,6 +114,7 @@ class Book {
 			for (let i = 0; i < this.tables.length; i++) {
 				const table = this.tables[i];
 				if (table.code === code) {
+					//console.log('table.code : '+table.code);
 					return resolve(table);
 				}
 			}
@@ -255,7 +265,7 @@ class Book {
 
 	createOrUpdateTTCRow(fieldValues) {
 		return new Promise((resolve, reject) => {
-			log('createOrUpdateTTCRows');
+			console.log('createOrUpdateTTCRows');
 			const filteredElementId = Object.values(fieldValues.filter)[0];
 			const filter = {
 				'applyViewFilters': {
@@ -298,7 +308,7 @@ class Book {
 	}
 
 	createOrUpdateTTCRows(rows) {
-		log('createOrUpdateTTCRows: ' + Object.keys(rows).length + ' rows');
+		console.log('createOrUpdateTTCRows: ' + Object.keys(rows).length + ' rows');
 		return new Promise((resolve, reject) => {
 			this.createOrUpdateTTCRowsPaged(rows, resolve, reject);
 		});
@@ -309,7 +319,7 @@ class Book {
 			resolve();
 			return;
 		}
-		log('createOrUpdateTTCRowsPaged', Object.keys(rows).length + ' remaining');
+		console.log('createOrUpdateTTCRowsPaged', Object.keys(rows).length + ' remaining');
 		const pagedRows = {};
 		const rowIds = Object.keys(rows);
 		const pageLength = Math.min(rowIds.length, WRITE_BATCH_SIZE);
@@ -337,7 +347,7 @@ class Book {
 					}
 				}
 				else if (parsedBody.error && parsedBody.error.indexOf('Deadlock') > -1) {
-					log('_createPagedTtcTableRows faced Deadlock: retrying');
+					console.log('_createPagedTtcTableRows faced Deadlock: retrying');
 					return this.createOrUpdateTTCRowsPaged(rows, resolve, reject);
 				}
 				else {
@@ -354,6 +364,7 @@ class Book {
 					for (let i = 0; i < table.fields.length; i++) {
 						const field = table.fields[i];
 						if (field.fixed_code === fieldFixedCode) {
+							//console.log('field.fixed_code : '+field.fixed_code);
 							return resolve(field);
 						}
 					}

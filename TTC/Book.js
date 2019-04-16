@@ -106,7 +106,19 @@ class Book {
 		});
 	}
 
-	getTableWithCode(code) {
+	getTableWithCode(code, promisify) {
+		if (promisify === false) {
+			if (!this.tables) {
+				throw new Error('no tables yet. please use fetchTables before getTableWithCode');
+			}
+			for (let i = 0; i < this.tables.length; i++) {
+				const table = this.tables[i];
+				if (table.code === code) {
+					return table;
+				}
+			}
+			throw new Error('no table found with code ' + code);
+		}
 		return new Promise((resolve, reject) => {
 			if (!this.tables) {
 				return reject(new Error('no tables yet. please use fetchTables before getTableWithCode'));
@@ -357,7 +369,18 @@ class Book {
 			.catch(reject);	
 	}
 
-	getFieldWithFixedCode(tableCode, fieldFixedCode) {
+	getFieldWithFixedCode(tableCode, fieldFixedCode, promisify) {
+		if (promisify === false) {
+			const table = this.getTableWithCode(tableCode, false);
+			for (let i = 0; i < table.fields.length; i++) {
+				const field = table.fields[i];
+				if (field.fixed_code === fieldFixedCode) {
+					//log('field.fixed_code : '+field.fixed_code);
+					return field;
+				}
+			}
+			throw new Error(`no field found with code ${fieldFixedCode} for table with code ${tableCode}`);
+		}
 		return new Promise((resolve, reject) => {
 			this.getTableWithCode(tableCode)
 				.then(table => {

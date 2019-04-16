@@ -65,45 +65,83 @@ class Book {
 		});
 	}
 
-	fetchTableValues(tableId, filter) {
-		log('tableId : ' + tableId);
-		return new Promise((resolve, reject) => {
-			if (!filter && this.tables && this.tables[tableId]) {
-				log('no filter');
-				return resolve();
-			}
-			const options = this.getRequestOptions();
-			options.form.req = TTC_API_REQUEST_GET_VALUES;
-			options.form.catId = tableId;
-			if (filter) {
-				options.form.filterRowIds = filter;
-			}
-			request(options)
-				.then(parsedBody => {
-					log('parsedBody.status : '+parsedBody.status);
-					if (parsedBody.status === 'ok') {
-						if (!this.tables) {
-							this.tables = [parsedBody.tableValues];
+	fetchTableValues(tableId, filter, pageSize, page, resolve, reject) {
+		if (!resolve || !reject) {
+			return new Promise((resolve, reject) => {
+				log('fetchTableValues for tableId : ' + tableId);
+				this.fetchTableValues(tableId, filter, pageSize, page, resolve ,reject);
+			});
+		}
+		if (!filter && this.tables && this.tables[tableId]) {
+			log('no filter');
+			return resolve();
+		}
+		const options = this.getRequestOptions();
+		options.form.req = TTC_API_REQUEST_GET_VALUES;
+		options.form.catId = tableId;
+		if (filter) {
+			options.form.filterRowIds = filter;
+		}
+		if (pageSize > 0) {
+			options.form.maxRows = pageSize;
+		}
+		if (!page) {
+			page = 1;
+		}
+		request(options)
+			.then(parsedBody => {
+				log('parsedBody.status : ' + parsedBody.status);
+				if (parsedBody.status === 'ok') {
+					if (!this.tables) {
+						this.tables = [parsedBody.tableValues];
+						if (parsedBody.tableValues.fields[0].values.length === parsedBody.tableValues.rowInfosLength) {
+							return resolve();
 						}
+						else {
+							const filter = Object.keys(parsedBody.tableValues.rowInfos)
+								.slice(pageSize, pageSize * 2)
+								.join(',');
+							return this.fetchTableValues(tableId, filter, pageSize, 2, resolve, reject);
+						}
+					}
+					else {
 						for (let i = 0; i < this.tables.length; i++) {
-							const table = this.tables[i];
-							if (table.id === tableId) {
-								table.fields = parsedBody.tableValues.fields;
-								return resolve();
+							if (this.tables[i].id === tableId) {
+								if (page === 1) {
+									this.tables[i].fields = parsedBody.tableValues.fields;
+									this.tables[i].rowInfos = parsedBody.tableValues.rowInfos;
+								}
+								else {
+									for (let j = 0; j < this.tables[i].fields.length; j++) {
+										this.tables[i].fields[j].values.push.apply(this.tables[i].fields[j].values, parsedBody.tableValues.fields[j].values);
+									}
+								}
+								if (this.tables[i].fields[0].values.length === this.tables[i].totalRowCount) {
+									log('fetchTableValues OVER');
+									return resolve();
+								}
+								else {
+									const filter = Object.keys(this.tables[i].rowInfos)
+										.slice(pageSize * page, pageSize * (page + 1))
+										.join(',');
+									log('fetchTableValues loading items ' + pageSize * page + ' to ' + Math.min(pageSize * (page + 1), this.tables[i].totalRowCount) + '/' + this.tables[i].totalRowCount);
+									return this.fetchTableValues(tableId, filter, pageSize, page + 1, resolve, reject);
+								}
 							}
 						}
-						return reject(new Error('table with id ' + tableId + ' not found'));
 					}
-					return reject(new Error(parsedBody.errorMsg));
-				})
-				.catch(err => {
-					log(err.message 
-						? err.message 
-						: err.stack 
-							? err.stack 
-							: err);
-				});
-		});
+					return reject(new Error('table with id ' + tableId + ' not found'));
+				}
+				return reject(new Error(parsedBody.errorMsg));
+			})
+			.catch(err => {
+				log(err.message 
+					? err.message 
+					: err.stack 
+						? err.stack 
+						: err);
+				reject(err);
+			});
 	}
 
 	getTableWithCode(code, promisify) {
@@ -126,7 +164,6 @@ class Book {
 			for (let i = 0; i < this.tables.length; i++) {
 				const table = this.tables[i];
 				if (table.code === code) {
-					//console.log('table.code : '+table.code);
 					return resolve(table);
 				}
 			}

@@ -1,7 +1,7 @@
 {
     "name": "ttc-node",
-    "version": "1.0.0",
-    "description": "",
+    "version": "0.1.0",
+    "description": "nodeJS wrapper around ttc's web api",
     "main": "index.js",
     "scripts": {
         "test": "mocha",
@@ -9,7 +9,9 @@
     },
     "author": "Jean Plouin",
     "license": "PRIVATE",
+    "private": true,
     "dependencies": {
+        "debug": "^4.1.1",
         "mime-types": "^2.1.22",
         "request": "^2.88.0",
         "request-promise": "^4.2.4",

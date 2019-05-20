@@ -116,7 +116,7 @@ class Book {
 										this.tables[i].fields[j].values.push.apply(this.tables[i].fields[j].values, parsedBody.tableValues.fields[j].values);
 									}
 								}
-								if (this.tables[i].fields[0].values.length === this.tables[i].totalRowCount) {
+								if (filter || this.tables[i].fields[0].values.length === this.tables[i].totalRowCount) {
 									log('fetchTableValues OVER');
 									return resolve();
 								}

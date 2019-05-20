@@ -1,20 +1,40 @@
 {
-    "name": "ttc-node",
-    "version": "0.1.0",
-    "description": "nodeJS wrapper around ttc's web api",
-    "main": "index.js",
-    "scripts": {
-        "test": "mocha",
-        "test-w": "mocha -w --check-leaks --sort"
-    },
-    "author": "Jean Plouin",
-    "license": "PRIVATE",
-    "private": true,
-    "dependencies": {
-        "debug": "^4.1.1",
-        "mime-types": "^2.1.22",
-        "request": "^2.88.0",
-        "request-promise": "^4.2.4",
-        "uuid": "^3.3.2"
+  "name": "ttc-nodejs",
+  "version": "0.1.0",
+  "description": "A nodeJS wrapper around the timetonic api",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "debug": "^4.1.1",
+    "mime-types": "^2.1.24",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4",
+    "uuid": "^3.3.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "mocha",
+    "test-w": "mocha -w --check-leaks --sort"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/JeanPlouin/ttc-nodeJS.git"
+  },
+  "keywords": [
+    "ttc"
+  ],
+  "author": "Jean Plouin <jplouin@timetonic.com> (https://timetonic.com)",
+  "license": "MIT",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/JeanPlouin/ttc-nodeJS/blob/master/LICENSE-MIT"
     }
+  ],
+  "bugs": {
+    "url": "https://github.com/JeanPlouin/ttc-nodeJS/issues"
+  },
+  "homepage": "https://github.com/JeanPlouin/ttc-nodeJS#readme"
 }

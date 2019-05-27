@@ -7,13 +7,15 @@
     "test": "test"
   },
   "dependencies": {
-    "debug": "^4.1.1",
     "mime-types": "^2.1.24",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
     "uuid": "^3.3.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "debug": "^4.1.1",
+    "ini": "^1.3.5"
+  },
   "scripts": {
     "test": "mocha",
     "test-w": "mocha -w --check-leaks --sort"

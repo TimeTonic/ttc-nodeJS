@@ -1,7 +1,7 @@
 {
     "id": 126185,
     "name": "test_code",
-    "code": "test_code",
+    "code": "test_table_code",
     "description": "",
     "order": null,
     "fpAutoExport": true,
@@ -17,8 +17,20 @@
     "sysFunc": null,
     "triggerUpdateUrl": null,
     "customCss": null,
-    "lastModified": "2019-03-21 15:06:45",
-    "sstamp": "1553177205",
+    "lastModified": "2019-05-27 13:55:06",
+    "sstamp": "1558958106",
+    "pivot_catid": null,
+    "p_field_hz": null,
+    "p_field_vt": null,
+    "p_field_va": null,
+    "p_field_co": null,
+    "p_des": null,
+    "p_dee": null,
+    "p_src_tab_id": null,
+    "rowDisplay": null,
+    "isAverageCalculation": null,
+    "columnPixelWidth": null,
+    "firstColumnWidth": null,
     "groups": [],
     "prefs": {
         "link_presentation": 2
@@ -31,19 +43,7 @@
             "description": null,
             "presentation": 1,
             "locked": false,
-            "filterGroup": null,
             "restrictions": [],
-            "applyHiddenFieldsInRowEdit": true,
-            "grid": {
-                "rowDisplay": null
-            },
-            "card": {
-                "hz_field_id": 1367490,
-                "layout": 1,
-                "title_field_id": null,
-                "co_field_id": null,
-                "free_order": 0
-            },
             "calendar": {
                 "display_field_id": 1367490,
                 "start_field_id": null,
@@ -82,6 +82,18 @@
                 "display_field_id": null,
                 "color_field_id": null
             },
+            "grid": {
+                "rowDisplay": null
+            },
+            "card": {
+                "hz_field_id": 1367490,
+                "layout": 1,
+                "title_field_id": null,
+                "co_field_id": null,
+                "free_order": 0
+            },
+            "filterGroup": null,
+            "applyHiddenFieldsInRowEdit": true,
             "linkViewIds": []
         }
     ],
@@ -94,7 +106,7 @@
             "id": 1367490,
             "group_id": null,
             "name": "Description",
-            "code": "",
+            "code": "test_field_code",
             "fixed_code": "description",
             "description": null,
             "type": "mediumtext",
@@ -118,10 +130,9 @@
             "activePresentation": 1,
             "linkPresentation": 2,
             "addLinkViewId": null,
-            "autodocFieldId": null,
             "sysFunc": null,
             "tplUrl": null,
-            "lastModified": "2019-03-21 15:06:08",
+            "lastModified": "2019-05-27 13:55:06",
             "hasRestrictions": false,
             "values": [
                 {
@@ -163,7 +174,6 @@
             "activePresentation": 1,
             "linkPresentation": 2,
             "addLinkViewId": null,
-            "autodocFieldId": null,
             "sysFunc": null,
             "tplUrl": null,
             "lastModified": "2019-03-21 15:06:45",
@@ -208,7 +218,6 @@
             "activePresentation": 1,
             "linkPresentation": 2,
             "addLinkViewId": null,
-            "autodocFieldId": null,
             "sysFunc": null,
             "tplUrl": null,
             "lastModified": "2019-03-21 15:06:45",
@@ -255,7 +264,6 @@
             "activePresentation": 1,
             "linkPresentation": 2,
             "addLinkViewId": null,
-            "autodocFieldId": null,
             "sysFunc": null,
             "tplUrl": null,
             "lastModified": "2019-03-21 15:06:45",
@@ -297,7 +305,7 @@
                             "u": {
                                 "c": "ttcapitester",
                                 "n": "TTC API Tester",
-                                "s": 15519679304545
+                                "s": 15583735519296
                             }
                         },
                         "total": 2
@@ -319,6 +327,6 @@
             "index": 1
         }
     },
-    "rowInfosLength": 2,
+    "rowInfosLength": 0,
     "hiddenFields": []
 }

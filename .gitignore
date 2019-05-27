@@ -75,3 +75,6 @@ typings/
 
 # FuseBox cache
 .fusebox/
+
+# WIP folder not to be commited
+chantier

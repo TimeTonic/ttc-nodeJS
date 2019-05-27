@@ -118,7 +118,7 @@ class Book {
 								}
 								if (filter || this.tables[i].fields[0].values.length === this.tables[i].totalRowCount) {
 									log('fetchTableValues OVER');
-									return resolve();
+									return resolve(this.tables[i]);
 								}
 								else {
 									const filter = Object.keys(this.tables[i].rowInfos)
@@ -429,6 +429,34 @@ class Book {
 						}
 					}
 					return reject(new Error(`no field found with code ${fieldFixedCode} for table with code ${tableCode}`));
+				})
+				.catch(reject);
+		});
+	}
+
+	getFieldWithCode(tableCode, fieldCode, promisify) {
+		if (promisify === false) {
+			const table = this.getTableWithCode(tableCode, false);
+			for (let i = 0; i < table.fields.length; i++) {
+				const field = table.fields[i];
+				if (field.code === fieldCode) {
+					//log('field.code : '+field.code);
+					return field;
+				}
+			}
+			throw new Error(`no field found with code ${fieldCode} for table with code ${tableCode}`);
+		}
+		return new Promise((resolve, reject) => {
+			this.getTableWithCode(tableCode)
+				.then(table => {
+					for (let i = 0; i < table.fields.length; i++) {
+						const field = table.fields[i];
+						if (field.code === fieldCode) {
+							//log('field.code : '+field.code);
+							return resolve(field);
+						}
+					}
+					return reject(new Error(`no field found with code ${fieldCode} for table with code ${tableCode}`));
 				})
 				.catch(reject);
 		});

@@ -2,8 +2,13 @@
 'use strict';
 
 const assert = require('assert');
-const fs = require('fs');
 const TTC = require('../index');
+const fs = require('fs');
+const ini = require('ini');
+const path = require('path');
+
+const configPath = path.resolve(__dirname, 'config.ini');
+const config = ini.parse(fs.readFileSync(configPath, 'utf-8'));
 
 describe('TTCApi', () => {
 	let readJson = path => {
@@ -19,12 +24,12 @@ describe('TTCApi', () => {
 	let book;
 	beforeEach(() => {
 		book = new TTC.Book({
-			b_c: 'mochatests',
-			b_o: 'ttcapitester',
-			u_c: 'ttcapitester', // pwd: TTCRules2019
-			sesskey: 'vCFm-F6Aj-CzNS-2VRX-kMNN-Giks-FZpK-0',
-			endpoint: 'https://timetonic.com/live/api.php',
-			version: '5.89'
+			b_c: config.b_c,
+			b_o: config.b_o,
+			u_c: config.u_c,
+			sesskey: config.sesskey,
+			endpoint: config.endpoint,
+			version: config.version
 		});
 	});
 	afterEach(() => {
@@ -39,7 +44,11 @@ describe('TTCApi', () => {
 						delete table.lastModified;
 						delete table.sstamp;
 					});
-					assert.deepEqual(book.tables, expected);
+					expected.bookTables.categories.forEach(table => {
+						delete table.lastModified;
+						delete table.sstamp;
+					});
+					assert.deepEqual(book.tables, expected.bookTables.categories);
 				})
 				.catch(assert.fail);
 		});
@@ -50,7 +59,7 @@ describe('TTCApi', () => {
 					expected = table;
 					return book.fetchTables();
 				})
-				.then(() => book.getTableWithCode('test_code'))
+				.then(() => book.getTableWithCode('test_table_code'))
 				.then(table => {
 					assert.deepEqual(table, expected);
 				})
@@ -63,7 +72,7 @@ describe('TTCApi', () => {
 					expected = filter;
 					return book.fetchTables();
 				})
-				.then(() => book.getTableWithCode('test_code'))
+				.then(() => book.getTableWithCode('test_table_code'))
 				.then(table => book.getFilterConfig(table, {
 					key: 'description',
 					value: 'First item'
@@ -80,7 +89,7 @@ describe('TTCApi', () => {
 					expected = tableValues;
 					return book.fetchTables();
 				})
-				.then(() => book.getTableWithCode('test_code'))
+				.then(() => book.getTableWithCode('test_table_code'))
 				.then(table => book.fetchTableValues(table.id))
 				.then(tableValues => {
 					assert.deepEqual(tableValues, expected);
@@ -94,7 +103,7 @@ describe('TTCApi', () => {
 					expected = tableValues;
 					return book.fetchTables();
 				})
-				.then(() => book.getTableWithCode('test_code'))
+				.then(() => book.getTableWithCode('test_table_code'))
 				.then(table => book.getFilterConfig(table, {
 					key: 'description',
 					value: 'First item'
@@ -112,8 +121,23 @@ describe('TTCApi', () => {
 					expected = field;
 					return book.fetchTables();
 				})
-				.then(() => book.getFieldWithFixedCode('test_code', 'description'))
+				.then(() => book.getFieldWithFixedCode('test_table_code', 'description'))
 				.then(field => {
+					delete field.lastModified;
+					assert.deepEqual(field, expected);
+				})
+				.catch(assert.fail);
+		});
+		it('should getFieldWithCode', () => {
+			let expected;
+			return readJson('./resources/getFieldWithCode.json')
+				.then(field => {
+					expected = field;
+					return book.fetchTables();
+				})
+				.then(() => book.getFieldWithCode('test_table_code', 'test_field_code'))
+				.then(field => {
+					delete field.lastModified;
 					assert.deepEqual(field, expected);
 				})
 				.catch(assert.fail);

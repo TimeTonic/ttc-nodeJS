@@ -98,7 +98,12 @@ class Book {
 					if (!this.tables) {
 						this.tables = [parsedBody.tableValues];
 						if (parsedBody.tableValues.fields[0].values.length === parsedBody.tableValues.rowInfosLength) {
-							return resolve();
+							for (let i = 0; i < this.tables.length; i++) {
+								if (this.tables[i].id === tableId) {
+									return resolve(this.tables[i]);
+								}
+							}
+							return reject(new Error(`table with id ${tableId} not found`));
 						}
 						else {
 							const filter = Object.keys(parsedBody.tableValues.rowInfos)

@@ -65,7 +65,7 @@ class Book {
 		});
 	}
 
-	fetchTableValues(tableId, filter, pageSize, page, resolve, reject) {
+	fetchTableValues(tableId, filter, pageSize, page, resolve, reject, onPage) {
 		if (!resolve || !reject) {
 			return new Promise((resolve, reject) => {
 				log('fetchTableValues for tableId : ' + tableId);
@@ -92,6 +92,9 @@ class Book {
 			.then(parsedBody => {
 				log('parsedBody.status : ' + parsedBody.status);
 				if (parsedBody.status === 'ok') {
+					if (onPage) {
+						onPage(parsedBody.tableValues);
+					}
 					if (!this.tables) {
 						this.tables = [parsedBody.tableValues];
 						if (parsedBody.tableValues.fields[0].values.length === parsedBody.tableValues.rowInfosLength) {

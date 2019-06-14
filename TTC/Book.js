@@ -69,7 +69,7 @@ class Book {
 		if (!resolve || !reject) {
 			return new Promise((resolve, reject) => {
 				log('fetchTableValues for tableId : ' + tableId);
-				this.fetchTableValues(tableId, filter, pageSize, page, resolve ,reject);
+				this.fetchTableValues(tableId, filter, pageSize, page, resolve ,reject, onPage);
 			});
 		}
 		if (!filter && this.tables && this.tables[tableId]) {
@@ -112,7 +112,7 @@ class Book {
 							if (onPage) {
 								onPage(parsedBody.tableValues);
 							}
-							return this.fetchTableValues(tableId, filter, pageSize, 2, resolve, reject);
+							return this.fetchTableValues(tableId, filter, pageSize, 2, resolve, reject, onPage);
 						}
 					}
 					else {
@@ -142,7 +142,7 @@ class Book {
 									if (onPage) {
 										onPage(parsedBody.tableValues);
 									}
-									return this.fetchTableValues(tableId, filter, pageSize, page + 1, resolve, reject);
+									return this.fetchTableValues(tableId, filter, pageSize, page + 1, resolve, reject, onPage);
 								}
 							}
 						}

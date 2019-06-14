@@ -92,14 +92,14 @@ class Book {
 			.then(parsedBody => {
 				log('parsedBody.status : ' + parsedBody.status);
 				if (parsedBody.status === 'ok') {
-					if (onPage) {
-						onPage(parsedBody.tableValues);
-					}
 					if (!this.tables) {
 						this.tables = [parsedBody.tableValues];
 						if (parsedBody.tableValues.fields[0].values.length === parsedBody.tableValues.rowInfosLength) {
 							for (let i = 0; i < this.tables.length; i++) {
 								if (this.tables[i].id === tableId) {
+									if (onPage) {
+										onPage(parsedBody.tableValues, true);
+									}
 									return resolve(this.tables[i]);
 								}
 							}
@@ -109,6 +109,9 @@ class Book {
 							const filter = Object.keys(parsedBody.tableValues.rowInfos)
 								.slice(pageSize, pageSize * 2)
 								.join(',');
+							if (onPage) {
+								onPage(parsedBody.tableValues);
+							}
 							return this.fetchTableValues(tableId, filter, pageSize, 2, resolve, reject);
 						}
 					}
@@ -126,6 +129,9 @@ class Book {
 								}
 								if (filter || this.tables[i].fields[0].values.length === this.tables[i].totalRowCount) {
 									log('fetchTableValues OVER');
+									if (onPage) {
+										onPage(parsedBody.tableValues, true);
+									}
 									return resolve(this.tables[i]);
 								}
 								else {
@@ -133,6 +139,9 @@ class Book {
 										.slice(pageSize * page, pageSize * (page + 1))
 										.join(',');
 									log('fetchTableValues loading items ' + pageSize * page + ' to ' + Math.min(pageSize * (page + 1), this.tables[i].totalRowCount) + '/' + this.tables[i].totalRowCount);
+									if (onPage) {
+										onPage(parsedBody.tableValues);
+									}
 									return this.fetchTableValues(tableId, filter, pageSize, page + 1, resolve, reject);
 								}
 							}

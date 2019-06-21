@@ -277,6 +277,15 @@ class Book {
 					}
 				}
 				if (!fieldId) {
+					for (let j = 0; j < table.fields.length; j++) {
+						const field = table.fields[j];
+						if (field.code === config.key) {
+							fieldId = field.id;
+							break;
+						}
+					}	
+				}
+				if (!fieldId) {
 					return reject(new Error('could not find a filter config for field ' + config.key));
 				}
 				filters.push({

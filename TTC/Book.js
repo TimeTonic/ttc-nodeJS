@@ -11,7 +11,7 @@ const TTC_API_REQUEST_GET_VALUES = 'getTableValues';
 const TTC_API_REQUEST_CREATE_OR_UPDATE_ROW = 'createOrUpdateTableRow';
 const TTC_API_REQUEST_CREATE_OR_UPDATE_ROWS = 'createOrUpdateTableRows';
 
-const WRITE_BATCH_SIZE = 200;
+const WRITE_BATCH_SIZE = 50;
 
 class Book {
 	constructor (options) {

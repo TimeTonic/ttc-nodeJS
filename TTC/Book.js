@@ -11,7 +11,7 @@ const TTC_API_REQUEST_GET_VALUES = 'getTableValues';
 const TTC_API_REQUEST_CREATE_OR_UPDATE_ROW = 'createOrUpdateTableRow';
 const TTC_API_REQUEST_CREATE_OR_UPDATE_ROWS = 'createOrUpdateTableRows';
 
-const WRITE_BATCH_SIZE = 50;
+const WRITE_BATCH_SIZE = 10;
 
 class Book {
 	constructor (options) {
@@ -345,7 +345,7 @@ class Book {
 
 	createOrUpdateTTCRow(fieldValues) {
 		return new Promise((resolve, reject) => {
-			log('createOrUpdateTTCRows');
+			log('createOrUpdateTTCRow');
 			const filteredElementId = Object.values(fieldValues.filter)[0];
 			const filter = {
 				'applyViewFilters': {
@@ -387,14 +387,14 @@ class Book {
 		});
 	}
 
-	createOrUpdateTTCRows(rows) {
+	createOrUpdateTTCRows(rows, options) {
 		log('createOrUpdateTTCRows: ' + Object.keys(rows).length + ' rows');
 		return new Promise((resolve, reject) => {
-			this.createOrUpdateTTCRowsPaged(rows, resolve, reject);
+			this.createOrUpdateTTCRowsPaged(rows, resolve, reject, options);
 		});
 	}
 
-	createOrUpdateTTCRowsPaged(rows, resolve, reject) {
+	createOrUpdateTTCRowsPaged(rows, resolve, reject, opts) {
 		if (Object.keys(rows).length === 0) {
 			resolve();
 			return;
@@ -413,6 +413,9 @@ class Book {
 		const options = this.getRequestOptions();
 		options.form.req = TTC_API_REQUEST_CREATE_OR_UPDATE_ROWS;
 		options.form.rows = pagedRows;
+		if (opts) {
+			options.form = Object.assign(options.form, opts);
+		}
 		request(options)
 			.then(parsedBody => {
 				if (parsedBody.status === 'ok') {
@@ -420,7 +423,7 @@ class Book {
 						delete rows[rowId];
 					});
 					if (Object.keys(rows).length) {
-						return this.createOrUpdateTTCRowsPaged(rows, resolve, reject);
+						return this.createOrUpdateTTCRowsPaged(rows, resolve, reject, opts);
 					}
 					else {
 						return resolve();
@@ -428,7 +431,7 @@ class Book {
 				}
 				else if (parsedBody.error && parsedBody.error.indexOf('Deadlock') > -1) {
 					log('_createPagedTtcTableRows faced Deadlock: retrying');
-					return this.createOrUpdateTTCRowsPaged(rows, resolve, reject);
+					return this.createOrUpdateTTCRowsPaged(rows, resolve, reject, opts);
 				}
 				else {
 					reject(new Error(JSON.stringify(parsedBody)));

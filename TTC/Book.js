@@ -402,7 +402,8 @@ class Book {
 		log('createOrUpdateTTCRowsPaged', Object.keys(rows).length + ' remaining');
 		const pagedRows = {};
 		const rowIds = Object.keys(rows);
-		const pageLength = Math.min(rowIds.length, WRITE_BATCH_SIZE);
+		const pageSize = opts.pageSize === undefined ? WRITE_BATCH_SIZE : opts.pageSize;
+		const pageLength = Math.min(rowIds.length, pageSize);
 		const pagedRowIds = [];
 		for (let i = 0; i < pageLength; i++) {
 			const rowId = rowIds[i];

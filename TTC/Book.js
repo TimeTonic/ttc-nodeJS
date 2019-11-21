@@ -65,16 +65,12 @@ class Book {
 		});
 	}
 
-	fetchTableValues(tableId, filter, pageSize, page, resolve, reject, onPage, rowIds) {
+	fetchTableValues(tableId, filter, pageSize=100, page=1, resolve, reject, onPage, rowIds) {
 		if (!resolve || !reject) {
 			return new Promise((resolve, reject) => {
 				log('fetchTableValues for tableId : ' + tableId);
 				this.fetchTableValues(tableId, filter, pageSize, page, resolve, reject, onPage, rowIds);
 			});
-		}
-		if (!filter && this.tables && this.tables[tableId]) {
-			log('no filter');
-			return resolve();
 		}
 		const options = this.getRequestOptions();
 		options.form.req = TTC_API_REQUEST_GET_VALUES;
@@ -82,12 +78,13 @@ class Book {
 		if (filter) {
 			options.form.filterRowIds = filter;
 		}
-		if (pageSize > 0) {
-			options.form.maxRows = pageSize;
+		options.form.maxRows = pageSize;
+		if (page < 1) {
+			log('page number must be greater than 0');
+			return reject();
 		}
-		if (!page) {
-			page = 1;
-		}
+		options.form.offset = (page-1) * pageSize;
+		
 		request(options)
 			.then(parsedBody => {
 				log('parsedBody.status : ' + parsedBody.status);
@@ -97,7 +94,7 @@ class Book {
 					}
 					if (!this.tables) {
 						this.tables = [parsedBody.tableValues];
-						if (parsedBody.tableValues.fields[0].values.length === rowIds.length) {
+						if (parsedBody.tableValues.fields[0].values.length === parsedBody.totalRowCount.totalRowCount) {
 							for (let i = 0; i < this.tables.length; i++) {
 								if (this.tables[i].id === tableId) {
 									if (onPage) {
@@ -129,9 +126,10 @@ class Book {
 								else {
 									for (let j = 0; j < this.tables[i].fields.length; j++) {
 										this.tables[i].fields[j].values.push.apply(this.tables[i].fields[j].values, parsedBody.tableValues.fields[j].values);
+										this.tables[i].rowInfos = {...this.tables[i].rowInfos, ...parsedBody.tableValues.rowInfos};	// Merge rowInfos
 									}
 								}
-								if (this.tables[i].fields[0].values.length === rowIds.length) {
+								if (this.tables[i].fields[0].values.length === parsedBody.tableValues.totalRowCount) {
 									log('fetchTableValues OVER');
 									if (onPage) {
 										return onPage(parsedBody.tableValues, true)
@@ -142,7 +140,7 @@ class Book {
 								else {
 									const filter = rowIds.slice(pageSize * page, pageSize * (page + 1))
 										.join(',');
-									log('fetchTableValues loading items ' + pageSize * page + ' to ' + Math.min(pageSize * (page + 1), rowIds.length) + '/' + rowIds.length);
+									log('fetchTableValues loading items ' + pageSize * page + ' to ' + Math.min(pageSize * (page + 1), parsedBody.tableValues.totalRowCount) + '/' + parsedBody.tableValues.totalRowCount);
 									if (onPage) {
 										return onPage(parsedBody.tableValues)
 											.then(() => this.fetchTableValues(tableId, filter, pageSize, page + 1, resolve, reject, onPage, rowIds));

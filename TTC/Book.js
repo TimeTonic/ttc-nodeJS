@@ -65,11 +65,11 @@ class Book {
 		});
 	}
 
-	fetchTableValues(tableId, filter, pageSize=100, page=1, resolve, reject, onPage, rowIds) {
+	fetchTableValues(tableId, filter, pageSize=100, page=1, resolve, reject, onPage) {
 		if (!resolve || !reject) {
 			return new Promise((resolve, reject) => {
 				log('fetchTableValues for tableId : ' + tableId);
-				this.fetchTableValues(tableId, filter, pageSize, page, resolve, reject, onPage, rowIds);
+				this.fetchTableValues(tableId, filter, pageSize, page, resolve, reject, onPage);
 			});
 		}
 		const options = this.getRequestOptions();
@@ -89,9 +89,6 @@ class Book {
 			.then(parsedBody => {
 				log('parsedBody.status : ' + parsedBody.status);
 				if (parsedBody.status === 'ok') {
-					if (!rowIds) {
-						rowIds = Object.keys(parsedBody.tableValues.rowInfos);
-					}
 					if (!this.tables) {
 						this.tables = [parsedBody.tableValues];
 						if (parsedBody.tableValues.fields[0].values.length === parsedBody.totalRowCount.totalRowCount) {
@@ -107,13 +104,11 @@ class Book {
 							return reject(new Error(`table with id ${tableId} not found`));
 						}
 						else {
-							const filter = rowIds.slice(pageSize, pageSize * 2)
-								.join(',');
 							if (onPage) {
 								return onPage(parsedBody.tableValues)
-									.then(() => this.fetchTableValues(tableId, filter, pageSize, 2, resolve, reject, onPage, rowIds));
+									.then(() => this.fetchTableValues(tableId, filter, pageSize, 2, resolve, reject, onPage));
 							}
-							return this.fetchTableValues(tableId, filter, pageSize, 2, resolve, reject, onPage, rowIds);
+							return this.fetchTableValues(tableId, filter, pageSize, 2, resolve, reject, onPage);
 						}
 					}
 					else {
@@ -138,14 +133,12 @@ class Book {
 									return resolve(this.tables[i]);
 								}
 								else {
-									const filter = rowIds.slice(pageSize * page, pageSize * (page + 1))
-										.join(',');
 									log('fetchTableValues loading items ' + pageSize * page + ' to ' + Math.min(pageSize * (page + 1), parsedBody.tableValues.totalRowCount) + '/' + parsedBody.tableValues.totalRowCount);
 									if (onPage) {
 										return onPage(parsedBody.tableValues)
-											.then(() => this.fetchTableValues(tableId, filter, pageSize, page + 1, resolve, reject, onPage, rowIds));
+											.then(() => this.fetchTableValues(tableId, filter, pageSize, page + 1, resolve, reject, onPage));
 									}
-									return this.fetchTableValues(tableId, filter, pageSize, page + 1, resolve, reject, onPage, rowIds);
+									return this.fetchTableValues(tableId, filter, pageSize, page + 1, resolve, reject, onPage);
 								}
 							}
 						}

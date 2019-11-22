@@ -91,7 +91,7 @@ class Book {
 				if (parsedBody.status === 'ok') {
 					if (!this.tables) {
 						this.tables = [parsedBody.tableValues];
-						if (parsedBody.tableValues.fields[0].values.length === parsedBody.totalRowCount.totalRowCount) {
+						if (parsedBody.tableValues.fields[0].values.length === parsedBody.tableValues.totalRowCount) {
 							for (let i = 0; i < this.tables.length; i++) {
 								if (this.tables[i].id === tableId) {
 									if (onPage) {

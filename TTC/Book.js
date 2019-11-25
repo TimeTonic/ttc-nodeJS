@@ -91,7 +91,7 @@ class Book {
 				if (parsedBody.status === 'ok') {
 					if (!this.tables) {
 						this.tables = [parsedBody.tableValues];
-						if (parsedBody.tableValues.fields[0].values.length === parsedBody.tableValues.totalRowCount) {
+						if (parsedBody.tableValues.fields[0].values.length < pageSize) {
 							for (let i = 0; i < this.tables.length; i++) {
 								if (this.tables[i].id === tableId) {
 									if (onPage) {
@@ -124,7 +124,7 @@ class Book {
 										this.tables[i].rowInfos = {...this.tables[i].rowInfos, ...parsedBody.tableValues.rowInfos};	// Merge rowInfos
 									}
 								}
-								if (this.tables[i].fields[0].values.length === parsedBody.tableValues.totalRowCount) {
+								if (parsedBody.tableValues.rowInfosLength < pageSize) {
 									log('fetchTableValues OVER');
 									if (onPage) {
 										return onPage(parsedBody.tableValues, true)
@@ -133,7 +133,7 @@ class Book {
 									return resolve(this.tables[i]);
 								}
 								else {
-									log('fetchTableValues loading items ' + pageSize * page + ' to ' + Math.min(pageSize * (page + 1), parsedBody.tableValues.totalRowCount) + '/' + parsedBody.tableValues.totalRowCount);
+									log('fetchTableValues loading items ' + pageSize * page + ' to ' + pageSize * (page + 1));
 									if (onPage) {
 										return onPage(parsedBody.tableValues)
 											.then(() => this.fetchTableValues(tableId, filter, pageSize, page + 1, resolve, reject, onPage));

@@ -10,6 +10,7 @@ const TTC_API_REQUEST_GET_TABLES = 'getBookTables';
 const TTC_API_REQUEST_GET_VALUES = 'getTableValues';
 const TTC_API_REQUEST_CREATE_OR_UPDATE_ROW = 'createOrUpdateTableRow';
 const TTC_API_REQUEST_CREATE_OR_UPDATE_ROWS = 'createOrUpdateTableRows';
+const TTC_API_REQUEST_DELETE_TABLE_ROWS = 'deleteTableRows';
 
 const WRITE_BATCH_SIZE = 10;
 
@@ -383,6 +384,14 @@ class Book {
 		return new Promise((resolve, reject) => {
 			this.createOrUpdateTTCRowsPaged(rows, resolve, reject, options);
 		});
+	}
+
+	deleteTableRows(rowIds) {
+		log('deleteTableRows', rowIds);
+		const options = this.getRequestOptions();
+		options.form.req = TTC_API_REQUEST_DELETE_TABLE_ROWS;
+		options.form.rows = rowIds;
+		return request(options);
 	}
 
 	createOrUpdateTTCRowsPaged(rows, resolve, reject, opts) {

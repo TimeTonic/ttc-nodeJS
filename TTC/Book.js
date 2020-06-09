@@ -416,6 +416,7 @@ class Book {
 		const options = this.getRequestOptions();
 		options.form.req = TTC_API_REQUEST_CREATE_OR_UPDATE_ROWS;
 		options.form.rows = pagedRows;
+		options.form.bypassUrlTrigger = false;
 		if (opts) {
 			options.form = Object.assign(options.form, opts);
 		}

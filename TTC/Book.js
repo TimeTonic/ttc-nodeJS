@@ -11,6 +11,7 @@ const TTC_API_REQUEST_GET_VALUES = 'getTableValues';
 const TTC_API_REQUEST_CREATE_OR_UPDATE_ROW = 'createOrUpdateTableRow';
 const TTC_API_REQUEST_CREATE_OR_UPDATE_ROWS = 'createOrUpdateTableRows';
 const TTC_API_REQUEST_DELETE_TABLE_ROWS = 'deleteTableRows';
+const TTC_API_REQUEST_SEND_MSG = 'sendMsg';
 
 const WRITE_BATCH_SIZE = 10;
 
@@ -563,6 +564,13 @@ class Book {
 				})
 				.catch(reject);
 		});
+	}
+
+	sendMessage(message) {
+		const options = this.getRequestOptions();
+		options.form.req = TTC_API_SEND_MSG;
+		options.form.msg = message;
+		return request(options);
 	}
 }
 

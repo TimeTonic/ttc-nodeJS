@@ -568,7 +568,7 @@ class Book {
 
 	sendMessage(message) {
 		const options = this.getRequestOptions();
-		options.form.req = TTC_API_SEND_MSG;
+		options.form.req = TTC_API_REQUEST_SEND_MSG;
 		options.form.msg = message;
 		return request(options);
 	}

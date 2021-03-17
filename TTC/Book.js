@@ -37,7 +37,7 @@ class Book {
 				'sesskey': this.admin ? this.admin.sesskey : this.sesskey
 			},
 			json: true,
-			timeout: 120000
+			timeout: 360000
 		};
 	}
 
